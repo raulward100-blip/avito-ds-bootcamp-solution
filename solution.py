@@ -15,9 +15,7 @@ def clean_text(text):
     return " ".join(text.split())
 
 # Шаг 1. Загружаем данные
-print("=" * 50)
 print("ШАГ 1: Загрузка данных")
-print("=" * 50)
 
 train = pd.read_parquet("train.parquet")
 queries = pd.read_parquet("benchmark_queries.parquet")
@@ -29,9 +27,7 @@ print(f"Загружено: train={len(train)}, queries={len(queries)}, items={l
 # Для запроса склеиваем search_query и search_infm_params_text.
 # Для объявления склеиваем заголовок, описание и параметры.
 # Чем больше текста, тем точнее поиск.
-print("=" * 50)
 print("ШАГ 2: Очистка текста")
-print("=" * 50)
 
 queries["query_text"] = (
     queries["search_query"].fillna("") + " " +
@@ -47,9 +43,7 @@ items["item_text"] = (
 print("Текст очищен")
 
 # Шаг 3. Строим BM25-индекс=
-print("=" * 50)
 print("ШАГ 3: Токенизация и BM25")
-print("=" * 50)
 
 tokenized_corpus = [doc.split() for doc in items["item_text"]]
 bm25 = BM25Okapi(tokenized_corpus)
@@ -62,9 +56,7 @@ print("BM25 создан")
 # 2. Берём топ-200.
 # 3. Фильтруем по категории и локации.
 # 4. Финальный ранкинг и топ-50.
-print("=" * 50)
 print("ШАГ 4: Поиск")
-print("=" * 50)
 
 predictions = []
 total = len(queries)
@@ -100,9 +92,7 @@ for i, query in enumerate(queries.itertuples()):
         print(f"[ПРОГРЕСС] {i + 1} из {total}")
 
 # Шаг 5. Сохраняем результат
-print("=" * 50)
 print("ШАГ 5: Сохранение")
-print("=" * 50)
 
 answer = pd.DataFrame({
     "query_id": queries["query_id"].astype(str),
