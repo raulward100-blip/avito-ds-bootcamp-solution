@@ -29,20 +29,13 @@ print(f"Загружено: train={len(train)}, queries={len(queries)}, items={l
 # Чем больше текста, тем точнее поиск.
 print("ШАГ 2: Очистка текста")
 
-queries["query_text"] = (
-    queries["search_query"].fillna("") + " " +
-    queries["search_infm_params_text"].fillna("")
-).apply(clean_text)
+queries["query_text"] = (queries["search_query"].fillna("") + " " + queries["search_infm_params_text"].fillna("")).apply(clean_text)
 
-items["item_text"] = (
-    items["item_title_raw"].fillna("") + " " +
-    items["item_description_raw"].fillna("") + " " +
-    items["item_infm_params_text"].fillna("")
-).apply(clean_text)
+items["item_text"] = (items["item_title_raw"].fillna("") + " " + items["item_description_raw"].fillna("") + " " + items["item_infm_params_text"].fillna("")).apply(clean_text)
 
 print("Текст очищен")
 
-# Шаг 3. Строим BM25-индекс=
+# Шаг 3. Строим BM25-индекс
 print("ШАГ 3: Токенизация и BM25")
 
 tokenized_corpus = [doc.split() for doc in items["item_text"]]
